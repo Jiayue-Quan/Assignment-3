@@ -1,0 +1,26 @@
+.main {
+    text-align: center;
+}
+
+.cardDeck {
+    width: 60vw;
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 10px;
+    
+    margin: auto;
+}
+
+.card {
+    aspect-ratio: 4/5;
+
+    background-image: url("images/question.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+img {
+    width: 200px;
+    display: inline-block;
+}
