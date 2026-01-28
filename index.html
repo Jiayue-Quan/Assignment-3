@@ -9,11 +9,29 @@
 </head>
 <body class="main">
     <h1>Memory Game</h1>
-    <h2 id="moves">Moves: 0</h2>
-    <div class="cardDeck">
-            
-        
-        
+
+    <div class="gameLayout">
+        <div class="sidebar">
+            <div id="moves">
+                <h2>Moves: 0</h2>
+            </div>
+
+            <label for="difficulty">Difficulty:</label>
+            <select id="diffSelector" onchange="getDifficulty(this.value)">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+
+            <button id="instructionsButton" type="button" onclick="showInstructions()">Show Instructions</button>
+            <p id="instructions" hidden>Click on each card to flip it and reveal the backside. 
+                If two cards flipped are the same fruit, you've made a match. If the two unflipped cards
+                 don't match, click a new card to try again.<br/>
+                <strong>The objective of the game is to find every pair of fruits in the card
+            deck.</strong></p>
+        </div>
+
+        <div class="cardDeck"></div>
     </div>
 </body>
 

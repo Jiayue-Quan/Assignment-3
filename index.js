@@ -1,9 +1,13 @@
 //Gameplay Constants
 let moves = 0;
 let pairsFound = 0;
-let currPair = []
+let currPair = [];
+let difficulty = "easy";
 let deck = ["images/apple.jpg", "images/apple.jpg", 
-    "images/lemon.avif", "images/lemon.avif", "images/orange.jpg", "images/orange.jpg", "images/pear.png", "images/pear.png", ];
+    "images/lemon.avif", "images/lemon.avif", 
+    "images/orange.jpg", "images/orange.jpg", 
+    "images/pear.png", "images/pear.png"];
+
 
 //Unflip Constants
 let isUnFlipping = false;
@@ -11,10 +15,35 @@ let timeOutTimer = null;
 let unflipping = [];
 
 //Initial page elements
-let main = document.querySelector('.cardDeck');
-let movesText = document.querySelector('#moves');
 
-//this is the fisher-yates algorithm for shuffling an array
+let main = document.querySelector('.cardDeck');
+let movesContainer = document.querySelector('#moves');
+let movesText = document.querySelector('#moves h2')
+let sidebar = document.querySelector('.sidebar');
+
+
+const showInstructions = () => {
+    
+    const instructions = document.getElementById("instructions");
+    const button = document.getElementById("instructionsButton");
+    if (instructions.hidden) {
+        instructions.hidden = false;
+
+        button.textContent = "Hide Instructions";
+    }
+    else {
+        instructions.hidden = true;
+
+    const button = document.getElementById("instructionsButton");
+    button.innerText = "Show Instructions";
+    }
+    
+    
+
+    
+}
+
+//the fisher-yates algorithm for shuffling an array
 const shuffleDeck = (deck) => {
     let currIndex = deck.length;
 
@@ -25,9 +54,6 @@ const shuffleDeck = (deck) => {
         [deck[currIndex], deck[randomIndex]] = [deck[randomIndex], deck[currIndex]];
     }
 }
-
-//initialize the game
-shuffleDeck(deck);
 
 //helper method for flipping a card back over
 const flipBack = (id1, id2) => {
@@ -43,7 +69,6 @@ const flipBack = (id1, id2) => {
 }
 //automatically unflips two unmatching cards if new card is flipped
 const skipFlipBackTimer = () => {
-    console.log(unflipping);
     clearTimeout(timeOutTimer);
     flipBack(unflipping[0], unflipping[1]);
 
@@ -53,10 +78,25 @@ const skipFlipBackTimer = () => {
 }
 
 const endGame = () => {
-    movesText.textContent = `YOU WIN!\nYou used: ${moves} moves`
+    const winAudio = new Audio("audio/win.wav");
+    winAudio.play();
+    movesContainer.innerHTML = `
+  <h1>YOU WIN!</h1>
+  <h3>You used: ${moves} moves</h3>
+`;  
 }
 //helper method for flipping a card over
 const flip = (id, cardContainer, index) => {
+    const flipAudio = new Audio('audio/flip.wav');
+    flipAudio.currentTime = 0;
+    flipAudio.play();
+
+    setTimeout(() => {
+        flipAudio.pause();
+        flipAudio.currentTime = 0; 
+    }, 180); 
+
+
     if (unflipping.length == 2) {
         skipFlipBackTimer();
     }
@@ -86,11 +126,12 @@ const flip = (id, cardContainer, index) => {
         else {
             pairsFound += 1;
             isUnFlipping = false;
+
+            const matchAudio =  new Audio('audio/match.mp3');
+            matchAudio.play();
         }
         currPair = [];
     }
-
-    
 
     if (pairsFound == deck.length / 2) {
         endGame();
@@ -100,9 +141,59 @@ const flip = (id, cardContainer, index) => {
     }
 }
 
+const buildBoard = () => {
+    main.innerHTML = "";
+    console.log(difficulty);
+    if (difficulty == "easy") {
+            deck = ["images/apple.jpg", "images/apple.jpg", 
+    "images/lemon.avif", "images/lemon.avif", 
+    "images/orange.jpg", "images/orange.jpg", 
+    "images/pear.png", "images/pear.png"];
+    }
+    else if (difficulty == "medium") {
+            deck = ["images/apple.jpg", "images/apple.jpg", 
+    "images/lemon.avif", "images/lemon.avif", 
+    "images/orange.jpg", "images/orange.jpg", 
+    "images/pear.png", "images/pear.png", 
+    "images/pineapple.png", "images/pineapple.png", 
+    "images/pomegranate.png", "images/pomegranate.png",
+    "images/banana.png", "images/banana.png",
+    "images/blueberry.png", "images/blueberry.png",
+    "images/coconut.jpg", "images/coconut.jpg"];
+    }
+    else {
+        deck = ["images/apple.jpg", "images/apple.jpg", 
+    "images/lemon.avif", "images/lemon.avif", 
+    "images/orange.jpg", "images/orange.jpg", 
+    "images/pear.png", "images/pear.png", 
+    "images/pineapple.png", "images/pineapple.png", 
+    "images/pomegranate.png", "images/pomegranate.png",
+    "images/banana.png", "images/banana.png",
+    "images/blueberry.png", "images/blueberry.png", 
+    "images/coconut.jpg", "images/coconut.jpg", 
+    "images/kiwi.png", "images/kiwi.png",
+    "images/watermelon.png", "images/watermelon.png",
+    "images/strawberry.png", "images/strawberry.png"];
+    }
 
-//initialize the card deck on the GUI and set up click event listener
-for (let i = 0; i < 8; i++) {
+    shuffleDeck(deck);
+
+    const pairs = deck.length/2;
+    if (pairs <= 4) {
+        main.style.gridTemplateColumns = "repeat(4, 15%)";
+        main.style.gridTemplateRows = "repeat(2, minmax(45%, 50%))";
+    }
+    else if (pairs <= 9) {
+        main.style.gridTemplateColumns = "repeat(6, 10%)";
+        main.style.gridTemplateRows = "repeat(3, minmax(30%, 35%))";
+    }
+    else {
+        main.style.gridTemplateColumns = "repeat(8, 10%)";
+        main.style.gridTemplateRows = "repeat(3, minmax(30%, 35%))";
+    }
+
+    //initialize the card deck on the GUI and set up click event listener
+for (let i = 0; i < deck.length; i++) {
     let cardContainer = document.createElement('div');
     cardContainer.classList.add('cardContainer');
     let cardImage = document.createElement('img');
@@ -124,4 +215,12 @@ for (let i = 0; i < 8; i++) {
     });
     main.append(cardContainer);
 }
+}
+
+const getDifficulty = (diff) => {
+    difficulty = diff;
+    buildBoard();
+}
+buildBoard();
+
 
