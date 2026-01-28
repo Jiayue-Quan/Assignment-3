@@ -219,6 +219,7 @@ for (let i = 0; i < deck.length; i++) {
 
 const getDifficulty = (diff) => {
     difficulty = diff;
+    movesContainer.innerHTML = "<h2>Moves: 0</h2>";
     buildBoard();
 }
 buildBoard();
