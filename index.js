@@ -13,6 +13,11 @@ let deck = ['images/apple.jpg', 'images/apple.jpg',
     'images/pear.png', 'images/pear.png'];
 let visibleDeck;
 
+//audio constants
+const flipAudio = new Audio('audio/flip.mp3');
+const matchAudio =  new Audio('audio/match.mp3');
+const winAudio = new Audio('audio/win.wav');
+
 
 //Unflip Constants
 let isUnFlipping = false;
@@ -91,7 +96,6 @@ const skipFlipBackTimer = () => {
 }
 
 const endGame = () => {
-    const winAudio = new Audio('audio/win.wav');
     
     if (visibleDeck.includes('images/question.png')) {
             movesContainer.innerHTML = `
@@ -106,14 +110,8 @@ const endGame = () => {
 }
 //helper method for flipping a card over
 const flip = (id, cardContainer, index) => {
-    const flipAudio = new Audio('audio/flip.wav');
-    flipAudio.currentTime = 0;
     flipAudio.play();
 
-    setTimeout(() => {
-        flipAudio.pause();
-        flipAudio.currentTime = 0; 
-    }, 180); 
 
 
     if (unflipping.length == 2) {
@@ -159,7 +157,7 @@ const flip = (id, cardContainer, index) => {
             pairsFound += 1;
             isUnFlipping = false;
 
-            const matchAudio =  new Audio('audio/match.mp3');
+            
             matchAudio.play();
 
             //no need to unflip
