@@ -99,6 +99,7 @@ const endGame = () => {
     
     if (visibleDeck.includes('images/question.png')) {
             movesContainer.innerHTML = `
+            <h2>Total Moves: ${localStorage.getItem("totalMoves")}</h2>
   <h2>Moves: ${moves}</h2>`
         }
     else {
@@ -111,8 +112,6 @@ const endGame = () => {
 //helper method for flipping a card over
 const flip = (id, cardContainer, index) => {
     flipAudio.play();
-
-
 
     if (unflipping.length == 2) {
         skipFlipBackTimer();
@@ -181,6 +180,9 @@ const initBoard = () => {
     movesText.textContent = `Moves: ${moves}`;
 
     currPair = JSON.parse(sessionStorage.getItem(`${difficulty}Pair`)) ?? [];
+    movesContainer.innerHTML = `
+            <h2>Total Moves: ${localStorage.getItem("totalMoves")}</h2>
+  <h2>Moves: ${moves}</h2>`
     
     if (sessionStorage.getItem(`${difficulty}Deck`)) {
         deck = JSON.parse(sessionStorage.getItem(`${difficulty}Deck`));
@@ -226,6 +228,7 @@ const initBoard = () => {
 }
 
 const buildBoard = () => {
+
     main.innerHTML = '';
     
     initBoard();
@@ -279,7 +282,6 @@ const getDifficulty = (diff) => {
     sessionStorage.setItem(`difficulty`, difficulty);
     buildBoard();
     return difficulty;
-    // movesContainer.innerHTML = '<h2>Moves: 0</h2>';
     
 }
 buildBoard();
