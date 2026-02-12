@@ -184,6 +184,9 @@ const initBoard = () => {
 
 
     currPair = JSON.parse(sessionStorage.getItem(`${difficulty}Pair`)) ?? [];
+    movesContainer.innerHTML = `
+            <h2>Total Moves: ${localStorage.getItem("totalMoves")}</h2>
+  <h2>Moves: ${moves}</h2>`
     
     if (sessionStorage.getItem(`${difficulty}Deck`)) {
         deck = JSON.parse(sessionStorage.getItem(`${difficulty}Deck`));
@@ -229,6 +232,7 @@ const initBoard = () => {
 }
 
 const buildBoard = () => {
+
 
     main.innerHTML = '';
     
