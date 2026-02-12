@@ -3,6 +3,7 @@ let pairsFound = 0;
 let difficulty = 'easy';
 
 let moves = sessionStorage.getItem(`${difficulty}Moves`) ?? 0;
+let totalMoves = localStorage.getItem(`totalMoves`) ?? 0;
 
 
 let currPair = JSON.parse(sessionStorage.getItem(`${difficulty}Pair`)) ?? [];
@@ -29,8 +30,9 @@ let currIndices = [];
 
 let main = document.querySelector('.cardDeck');
 let movesContainer = document.querySelector('#moves');
-let movesText = document.querySelector('#moves h2')
-movesText.textContent = `Moves: ${moves}`;
+movesContainer.innerHTML = `
+            <h2>Total Moves: ${totalMoves}</h2>
+  <h2>Moves: ${moves}</h2>`
 let sidebar = document.querySelector('.sidebar');
 
 if (sessionStorage.getItem(`difficulty`)) {
@@ -99,20 +101,20 @@ const endGame = () => {
     
     if (visibleDeck.includes('images/question.png')) {
             movesContainer.innerHTML = `
+            <h2>Total Moves: ${totalMoves}</h2>
   <h2>Moves: ${moves}</h2>`
         }
     else {
         winAudio.play();
     movesContainer.innerHTML = `
   <h1>YOU WIN!</h1>
-  <h3>You used: ${moves} moves</h3>`; 
+  <h2>Total Moves: ${totalMoves}</h2>
+  <h2>You used: ${moves} moves</h2>`; 
     } 
 }
 //helper method for flipping a card over
 const flip = (id, cardContainer, index) => {
     flipAudio.play();
-
-
 
     if (unflipping.length == 2) {
         skipFlipBackTimer();
@@ -137,6 +139,7 @@ const flip = (id, cardContainer, index) => {
 
         //adds each move to the local storage Total Moves
         localStorage.setItem("totalMoves", parseInt(localStorage.getItem("totalMoves") ?? 0) + 1);
+        totalMoves = localStorage.getItem("totalMoves");
         isUnFlipping = true;
         const id1 = currPair[0];
         const id2 = currPair[1];
@@ -178,7 +181,7 @@ const initBoard = () => {
     
 
     moves = sessionStorage.getItem(`${difficulty}Moves`) ?? 0;
-    movesText.textContent = `Moves: ${moves}`;
+
 
     currPair = JSON.parse(sessionStorage.getItem(`${difficulty}Pair`)) ?? [];
     
@@ -226,6 +229,7 @@ const initBoard = () => {
 }
 
 const buildBoard = () => {
+
     main.innerHTML = '';
     
     initBoard();
@@ -279,7 +283,6 @@ const getDifficulty = (diff) => {
     sessionStorage.setItem(`difficulty`, difficulty);
     buildBoard();
     return difficulty;
-    // movesContainer.innerHTML = '<h2>Moves: 0</h2>';
     
 }
 buildBoard();
